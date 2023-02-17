@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users index{% endblock %}
+
+{% block body %}
+    <h1>Users index</h1>
+    <div>
+        <a class="btn btn-success float-right" href="{{ path('app_users_new') }}"><i class="fa fa-plus" aria-hidden="true"></i> Add User</a>
+        <input type="text" id="searchField" onkeyup="searchTable()" placeholder="Search...">
+    </div>
+    <br>
+    <table class="table table-bordered border-primary table-striped">
+         <thead style= "background: lightblue";>
+            <tr style="color:black">
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Telephone</th>
+                <th>Email</th>
+                <th>Adresse</th>
+                <th>Ville</th>
+                <th>Code_postal</th>
+                <th>Pays</th>
+                <th>Etat</th>
+                <th>Role</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.telephone }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.adresse }}</td>
+                <td>{{ user.ville }}</td>
+                <td>{{ user.codePostal }}</td>
+                <td>{{ user.pays }}</td>
+                <td>{{ user.etat }}</td>
+                
+                <td>
+                    {% for role in user.role %}
+                        {{ role.nom }}
+                    {% endfor %}
+                </td>
+
+                <td>{{ user.username }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                
+                <td>
+
+                    <a class="btn btn-success" href="{{ path('app_users_show', {'id': user.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i> Show</a>
+                    <a  class="btn btn-warning" href="{{ path('app_users_edit', {'id': user.id}) }}"><i class="fa fa-pencil fa-fw"></i> Edit</a>
+                    <form method="post" action="{{ path('app_users_delete', {'id': user.id}) }}" style="display:
+                    inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                        <button class="btn btn-danger""><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_users_new') }}">Create new</a>
+
+<script>
+function searchTable() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchField");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+{% endblock %}

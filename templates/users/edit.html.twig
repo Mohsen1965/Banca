@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Users{% endblock %}
+
+{% block body %}
+    <h1>Edit Users</h1>
+        {{ include('users/_form.html.twig') }}
+
+    {{ form_end(form) }}
+{% endblock %}
